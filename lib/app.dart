@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expense_tracker/features/expense/presentation/pages/expense_summary_page.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -9,9 +10,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'expense',
       locale: context.locale,
-      home: Scaffold(
-        body: Container(),
-      ),
+      home: const ExpenseSummaryPage(),
     );
   }
 }
