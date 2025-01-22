@@ -4,8 +4,8 @@ import 'package:hive/hive.dart';
 
 abstract class ExpenseDatasource {
   Future<List<ExpenseModel>> get(DateTime date);
-  Future<ExpenseModel> add(ExpenseModel entity);
-  Future<bool> deleteEntity(ExpenseModel entity);
+  Future<ExpenseModel> add(ExpenseModel model);
+  Future<bool> deleteEntity(ExpenseModel model);
 }
 
 class ExpenseDatasourceImpl extends ExpenseDatasource {
@@ -35,15 +35,15 @@ class ExpenseDatasourceImpl extends ExpenseDatasource {
   }
 
   @override
-  Future<ExpenseModel> add(ExpenseModel entity) async {
-    await _box.put(entity.id, entity);
-    return Future.value(entity);
+  Future<ExpenseModel> add(ExpenseModel model) async {
+    await _box.put(model.id, model);
+    return Future.value(model);
   }
 
   @override
-  Future<bool> deleteEntity(ExpenseModel entity) async {
+  Future<bool> deleteEntity(ExpenseModel model) async {
     final key = _box.keys.firstWhere(
-      (k) => _box.get(k) == entity,
+      (k) => _box.get(k) == model,
       orElse: () => null,
     );
     await _box.delete(key);

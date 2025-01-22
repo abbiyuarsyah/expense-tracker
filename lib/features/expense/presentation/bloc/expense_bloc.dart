@@ -20,9 +20,11 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
           ExpenseState(
             getExpensesStatus: StateStatus.init,
             addExpenseStatus: StateStatus.init,
+            deleteExpenseStatus: StateStatus.init,
             expenses: const [],
             addExpenseFlag: false,
             selectedDate: DateTime.now(),
+            weeklySpent: 0,
           ),
         ) {
     on<GetExpensesEvent>(_onGetExpensesEvent);
@@ -48,7 +50,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         date = state.selectedDate.subtract(const Duration(days: 1));
       case SelectDateEnum.tomorrow:
         date = state.selectedDate.add(const Duration(days: 1));
-
+      case SelectDateEnum.currentDate:
+        date = state.selectedDate;
       default:
     }
 
@@ -93,13 +96,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     DeleteExpenseEvent event,
     Emitter<ExpenseState> emit,
   ) async {
-    emit(state.copyWith(addExpenseStatus: StateStatus.loading));
+    emit(state.copyWith(deleteExpenseStatus: StateStatus.loading));
 
     final result = await deleteExpense(event.expense);
     result.fold((l) {
-      emit(state.copyWith(addExpenseStatus: StateStatus.failed));
+      emit(state.copyWith(deleteExpenseStatus: StateStatus.failed));
     }, (r) {
-      emit(state.copyWith(addExpenseStatus: StateStatus.loaded));
+      emit(state.copyWith(deleteExpenseStatus: StateStatus.loaded));
     });
   }
 }

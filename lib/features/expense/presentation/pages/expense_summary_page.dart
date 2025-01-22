@@ -45,7 +45,39 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
         ),
       ),
       backgroundColor: Colors.grey[200],
-      body: BlocBuilder<ExpenseBloc, ExpenseState>(
+      body: BlocConsumer<ExpenseBloc, ExpenseState>(
+        listenWhen: (previous, current) =>
+            previous.deleteExpenseStatus != current.deleteExpenseStatus,
+        listener: (context, state) {
+          if (state.deleteExpenseStatus == StateStatus.loaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  tr('delete_expense_success'),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
+            sl<ExpenseBloc>().add(const GetExpensesEvent(
+              selectDate: SelectDateEnum.currentDate,
+            ));
+          } else if (state.deleteExpenseStatus == StateStatus.failed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  tr('delete_expense_failed'),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
         buildWhen: (previous, next) =>
             previous.getExpensesStatus != next.getExpensesStatus,
         builder: (context, state) {

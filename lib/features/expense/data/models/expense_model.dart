@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
 part 'expense_model.g.dart';
 
 @HiveType(typeId: 1)
-class ExpenseModel {
+class ExpenseModel extends Equatable {
   const ExpenseModel({
     required this.id,
     required this.amount,
@@ -34,4 +35,23 @@ class ExpenseModel {
       description: '',
     );
   }
+
+  ExpenseModel copyWith({
+    int? id,
+    double? amount,
+    int? category,
+    DateTime? date,
+    String? description,
+  }) {
+    return ExpenseModel(
+      id: id ?? this.id,
+      amount: amount ?? this.amount,
+      category: category ?? this.category,
+      date: date ?? this.date,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  List<Object> get props => [id, amount, category, date, description];
 }

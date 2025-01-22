@@ -4,7 +4,6 @@ import 'package:expense_tracker/features/expense/presentation/bloc/expense_bloc.
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/dimens.dart';
@@ -12,6 +11,7 @@ import '../../../../core/enums/expense_category_enum.dart';
 import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/shared_widget/text_field_widget.dart';
+import '../../../../core/utils/currecncy_input_formatter.dart';
 
 class AddExpensePage extends StatefulWidget {
   const AddExpensePage({super.key});
@@ -94,8 +94,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     decimal: true,
                   ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
+                    CurrencyTextInputFormatter(locale: 'de_DE'),
                   ],
                   labelText: tr('amount'),
                   prefixText: '€ ',
@@ -172,7 +171,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       if (_formKey.currentState!.validate() &&
                           _selectedDate != null &&
                           _selectedOption != null) {
-                        final textValue = _amountController.text;
+                        final textValue = _amountController.text
+                            .replaceAll('.', '')
+                            .replaceAll(',', '.');
                         final doubleValue = double.tryParse(textValue);
 
                         sl<ExpenseBloc>().add(

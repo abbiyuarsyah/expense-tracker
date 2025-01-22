@@ -2,9 +2,12 @@ import 'package:expense_tracker/core/enums/expense_category_enum.dart';
 import 'package:expense_tracker/core/extensions/number_formatter.dart';
 import 'package:expense_tracker/core/shared_widget/card_container.dart';
 import 'package:expense_tracker/features/expense/domain/entities/expense_entity.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_event.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/dimens.dart';
+import '../../../../core/service_locator/service_locator.dart';
+import '../bloc/expense_bloc.dart';
 
 class ListItemExpenseWidget extends StatelessWidget {
   const ListItemExpenseWidget({super.key, required this.expense});
@@ -48,11 +51,24 @@ class ListItemExpenseWidget extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            expense.amount.toEuroFormat,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              Text(
+                expense.amount.toEuroFormat,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.delete_forever_rounded,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  sl<ExpenseBloc>().add(DeleteExpenseEvent(expense: expense));
+                },
+              ),
+            ],
           )
         ],
       ),

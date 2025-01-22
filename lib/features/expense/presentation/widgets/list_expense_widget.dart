@@ -79,23 +79,28 @@ class ListExpenseWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: Dimens.medium),
-                const Divider(),
-                SizedBox(
-                  height: 400,
-                  child: ListView.separated(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: Dimens.medium),
-                    itemCount: state.expenses.length,
-                    itemBuilder: (context, index) {
-                      return ListItemExpenseWidget(
-                        expense: state.expenses[index],
-                      );
-                    },
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: Dimens.medium,
+                if (state.expenses.isNotEmpty)
+                  SizedBox(
+                    height: 400,
+                    child: ListView.separated(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: Dimens.medium),
+                      itemCount: state.expenses.length,
+                      itemBuilder: (context, index) {
+                        return ListItemExpenseWidget(
+                          expense: state.expenses[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: Dimens.medium,
+                      ),
                     ),
-                  ),
-                ),
+                  )
+                else
+                  const SizedBox(
+                    height: 400,
+                    child: Center(child: Text("You don't have expenses yet")),
+                  )
               ],
             ),
           );

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expense_tracker/core/extensions/number_formatter.dart';
 import 'package:flutter/material.dart';
 
@@ -25,9 +26,9 @@ class SummaryWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            "Spent this week",
-            style: TextStyle(
+          Text(
+            tr('spent_this_week'),
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.white,
             ),
