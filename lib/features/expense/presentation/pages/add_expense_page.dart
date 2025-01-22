@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:expense_tracker/core/enums/state_status.dart';
+import 'package:expense_tracker/core/enums/state_status_enum.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_state.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/dimens.dart';
 import '../../../../core/enums/expense_category_enum.dart';
+import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/shared_widget/text_field_widget.dart';
 
@@ -33,15 +34,15 @@ class _AddExpensePageState extends State<AddExpensePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Colors.black,
         ),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.white,
         title: Text(
           tr('add_expense'),
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
@@ -61,7 +62,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 backgroundColor: Colors.green,
               ),
             );
-            sl<ExpenseBloc>().add(GetExpensesEvent(date: DateTime.now()));
+            sl<ExpenseBloc>().add(
+              const GetExpensesEvent(selectDate: SelectDateEnum.today),
+            );
             Navigator.pop(context);
           } else if (state.addExpenseStatus == StateStatus.failed) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -109,6 +112,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   value: _selectedOption,
                   decoration: InputDecoration(
                     labelText: tr('select_category'),
+                    labelStyle: const TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                    ),
                     border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.list),
                   ),
@@ -179,7 +186,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       }
                     },
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.purple,
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(Dimens.medium),

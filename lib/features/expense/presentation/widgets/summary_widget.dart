@@ -11,6 +11,7 @@ class SummaryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardContainer(
       margin: const EdgeInsets.symmetric(horizontal: Dimens.large),
+      color: Colors.blue,
       isTopRounded: true,
       isBottomRounded: true,
       shadow: [
@@ -28,6 +29,7 @@ class SummaryWidget extends StatelessWidget {
             "Spent this week",
             style: TextStyle(
               fontSize: 16,
+              color: Colors.white,
             ),
           ),
           Text(
@@ -35,6 +37,7 @@ class SummaryWidget extends StatelessWidget {
             style: const TextStyle(
               fontSize: 38,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ],

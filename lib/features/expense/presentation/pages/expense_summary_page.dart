@@ -1,9 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:expense_tracker/core/enums/state_status.dart';
+import 'package:expense_tracker/core/enums/state_status_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/dimens.dart';
+import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/shared_widget/card_container.dart';
 import '../bloc/expense_bloc.dart';
@@ -24,20 +25,22 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
   @override
   void initState() {
     super.initState();
-    sl<ExpenseBloc>().add(GetExpensesEvent(date: DateTime.now()));
+    sl<ExpenseBloc>().add(
+      const GetExpensesEvent(selectDate: SelectDateEnum.today),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.white,
         title: Text(
           tr('expense'),
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
@@ -53,13 +56,13 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
               width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: [
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: Dimens.extraLarge),
-                      const SummaryWidget(),
-                      const SizedBox(height: Dimens.extraLarge),
-                      ListExpenseWidget(expenses: state.expenses),
+                      SizedBox(height: Dimens.extraLarge),
+                      SummaryWidget(),
+                      SizedBox(height: Dimens.extraLarge),
+                      ListExpenseWidget(),
                     ],
                   ),
                   Positioned.fill(
@@ -82,7 +85,7 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
                                 );
                               },
                               style: TextButton.styleFrom(
-                                backgroundColor: Colors.purple,
+                                backgroundColor: Colors.blue,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -91,7 +94,10 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
                               ),
                               child: Text(
                                 tr('add_expense'),
-                                style: const TextStyle(fontSize: 16.0),
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),

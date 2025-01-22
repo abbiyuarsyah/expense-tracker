@@ -1,13 +1,15 @@
 import 'package:expense_tracker/features/expense/domain/entities/expense_entity.dart';
 
+import '../../../../core/enums/select_date_enum.dart';
+
 abstract class ExpenseEvent {
   const ExpenseEvent();
 }
 
 class GetExpensesEvent extends ExpenseEvent {
-  const GetExpensesEvent({required this.date});
+  const GetExpensesEvent({required this.selectDate});
 
-  final DateTime date;
+  final SelectDateEnum selectDate;
 }
 
 class AddExpenseEvent extends ExpenseEvent {

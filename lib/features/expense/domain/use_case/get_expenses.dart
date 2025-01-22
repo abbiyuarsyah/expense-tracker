@@ -5,16 +5,16 @@ import 'package:expense_tracker/features/expense/domain/repositories/expense_rep
 
 import '../../../../core/utils/use_case.dart';
 
-class GetExpenses extends UseCase<List<ExpenseEntity>, Object?> {
+class GetExpenses extends UseCase<List<ExpenseEntity>, DateTime> {
   GetExpenses({required this.repository});
 
   final ExpenseRepository repository;
 
   @override
   Future<Either<Failure, List<ExpenseEntity>>> call(
-    Object? params,
+    DateTime params,
   ) async {
-    final result = await repository.getAll();
+    final result = await repository.get(params);
 
     return result.fold(
       (l) => Left(l),

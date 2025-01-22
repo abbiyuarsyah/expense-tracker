@@ -33,9 +33,9 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   }
 
   @override
-  Future<Either<Failure, List<ExpenseModel>>> getAll() async {
+  Future<Either<Failure, List<ExpenseModel>>> get(DateTime date) async {
     try {
-      final result = await datasource.getAll();
+      final result = await datasource.get(date);
       return Right(result);
     } catch (e) {
       return Left(UnexpectedFailure());

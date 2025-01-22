@@ -9,6 +9,7 @@
     "date_hint": "DD/MM/YYYY",
     "add": "Add",
     "expense": "Expense",
+    "today": "Today",
     "amount_empty": "Amount cannot be empty",
     "category_empty": "Category cannot be empty",
     "date_empty": "Date cannot be empty",

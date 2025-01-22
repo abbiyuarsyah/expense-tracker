@@ -41,9 +41,17 @@ class TextFieldWidget extends StatelessWidget {
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         labelText: labelText,
+        labelStyle: const TextStyle(
+          color: Colors.black54,
+          fontSize: 14,
+        ),
         prefixText: prefixText,
         border: const OutlineInputBorder(),
         hintText: hintText,
+        hintStyle: const TextStyle(
+          color: Colors.black54,
+          fontSize: 14,
+        ),
         prefixIcon: prefixIcon,
         alignLabelWithHint: alignLabelWithHint,
       ),

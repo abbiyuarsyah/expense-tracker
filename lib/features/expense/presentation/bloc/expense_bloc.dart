@@ -1,14 +1,14 @@
 import 'dart:math';
 
+import 'package:expense_tracker/core/enums/select_date_enum.dart';
 import 'package:expense_tracker/features/expense/domain/entities/expense_entity.dart';
 import 'package:expense_tracker/features/expense/domain/use_case/add_expense.dart';
 import 'package:expense_tracker/features/expense/domain/use_case/delete_expense.dart';
 import 'package:expense_tracker/features/expense/domain/use_case/get_expenses.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_state.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/enums/state_status.dart';
+import '../../../../core/enums/state_status_enum.dart';
 import 'expense_event.dart';
 
 class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
@@ -17,11 +17,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     required this.deleteExpense,
     required this.getExpenses,
   }) : super(
-          const ExpenseState(
+          ExpenseState(
             getExpensesStatus: StateStatus.init,
             addExpenseStatus: StateStatus.init,
-            expenses: [],
+            expenses: const [],
             addExpenseFlag: false,
+            selectedDate: DateTime.now(),
           ),
         ) {
     on<GetExpensesEvent>(_onGetExpensesEvent);
@@ -39,18 +40,25 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
   ) async {
     emit(state.copyWith(getExpensesStatus: StateStatus.loading));
 
-    final result = await getExpenses(null);
+    late DateTime date;
+    switch (event.selectDate) {
+      case SelectDateEnum.today:
+        date = DateTime.now();
+      case SelectDateEnum.yesterday:
+        date = state.selectedDate.subtract(const Duration(days: 1));
+      case SelectDateEnum.tomorrow:
+        date = state.selectedDate.add(const Duration(days: 1));
+
+      default:
+    }
+
+    emit(state.copyWith(selectedDate: date));
+
+    final result = await getExpenses(date);
     result.fold((l) {
       emit(state.copyWith(getExpensesStatus: StateStatus.failed));
     }, (r) {
-      final result = r
-          .where((element) => DateUtils.isSameDay(element.date, event.date))
-          .toList();
-
-      emit(state.copyWith(
-        getExpensesStatus: StateStatus.loaded,
-        expenses: result,
-      ));
+      emit(state.copyWith(getExpensesStatus: StateStatus.loaded, expenses: r));
     });
   }
 

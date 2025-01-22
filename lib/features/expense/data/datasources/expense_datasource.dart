@@ -1,8 +1,9 @@
 import 'package:expense_tracker/features/expense/data/models/expense_model.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 abstract class ExpenseDatasource {
-  Future<List<ExpenseModel>> getAll();
+  Future<List<ExpenseModel>> get(DateTime date);
   Future<ExpenseModel> add(ExpenseModel entity);
   Future<bool> deleteEntity(ExpenseModel entity);
 }
@@ -51,11 +52,12 @@ class ExpenseDatasourceImpl extends ExpenseDatasource {
   }
 
   @override
-  Future<List<ExpenseModel>> getAll() async {
+  Future<List<ExpenseModel>> get(DateTime date) async {
     final values = _box.values.toList().cast<ExpenseModel>();
-    return values.isEmpty
-        ? Future.value([ExpenseModel.empty()])
-        : Future.value(values);
+    final result =
+        values.where((e) => DateUtils.isSameDay(e.date, date)).toList();
+
+    return result.isEmpty ? Future.value([]) : Future.value(result);
   }
 
   Future<void> open() async {
