@@ -1,9 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expense_tracker/core/enums/state_status.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_event.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/dimens.dart';
 import '../../../../core/enums/expense_category_enum.dart';
+import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/shared_widget/text_field_widget.dart';
 
 class AddExpensePage extends StatefulWidget {
@@ -19,6 +25,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ExpenseCategoryEnum? _selectedOption;
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -38,94 +45,154 @@ class _AddExpensePageState extends State<AddExpensePage> {
           ),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(Dimens.large).copyWith(
-            bottom: Dimens.xxLarge,
-          ),
-          child: Column(
-            children: [
-              TextFieldWidget(
-                textEditingController: _amountController,
-                textInputType: const TextInputType.numberWithOptions(
-                  decimal: true,
+      body: BlocListener<ExpenseBloc, ExpenseState>(
+        listenWhen: (previous, current) =>
+            previous.addExpenseFlag != current.addExpenseFlag,
+        listener: (context, state) {
+          if (state.addExpenseStatus == StateStatus.loaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  tr('add_expense_success'),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                labelText: tr('amount'),
-                prefixText: '€ ',
-                hintText: tr('enter_amount'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Name cannot be empty';
-                  }
-                  return null;
-                },
+                backgroundColor: Colors.green,
               ),
-              const SizedBox(height: Dimens.large),
-              DropdownButtonFormField<ExpenseCategoryEnum>(
-                value: _selectedOption,
-                decoration: InputDecoration(
-                  labelText: tr('select_category'),
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.list),
+            );
+            sl<ExpenseBloc>().add(GetExpensesEvent(date: DateTime.now()));
+            Navigator.pop(context);
+          } else if (state.addExpenseStatus == StateStatus.failed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  tr('add_expense_failed'),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                items: ExpenseCategoryEnum.values.map((category) {
-                  return DropdownMenuItem(
-                    value: category,
-                    child: Text(category.value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedOption = value;
-                  });
-                },
+                backgroundColor: Colors.red,
               ),
-              const SizedBox(height: Dimens.large),
-              TextFieldWidget(
-                textEditingController: _dateController,
-                readOnly: true,
-                labelText: tr('select_date'),
-                prefixIcon: const Icon(Icons.calendar_today),
-                hintText: tr('date_hint'),
-                alignLabelWithHint: true,
-                onTap: () => _selectDate(context),
-              ),
-              const SizedBox(height: Dimens.large),
-              TextFieldWidget(
-                textEditingController: _descriptionController,
-                maxLines: 5,
-                labelText: tr('description'),
-                hintText: tr('enter_description_here'),
-                alignLabelWithHint: true,
-              ),
-              const Expanded(child: SizedBox()),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                child: TextButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      print('Form is valid');
+            );
+          }
+        },
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(Dimens.large).copyWith(
+              bottom: Dimens.xxLarge,
+            ),
+            child: Column(
+              children: [
+                TextFieldWidget(
+                  textEditingController: _amountController,
+                  textInputType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  labelText: tr('amount'),
+                  prefixText: '€ ',
+                  hintText: tr('enter_amount'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return tr('amount_empty');
                     }
+                    return null;
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(Dimens.medium),
+                ),
+                const SizedBox(height: Dimens.large),
+                DropdownButtonFormField<ExpenseCategoryEnum>(
+                  value: _selectedOption,
+                  decoration: InputDecoration(
+                    labelText: tr('select_category'),
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.list),
+                  ),
+                  items: ExpenseCategoryEnum.values.map((category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category.value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedOption = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return tr('category_empty');
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: Dimens.large),
+                TextFieldWidget(
+                  textEditingController: _dateController,
+                  readOnly: true,
+                  labelText: tr('select_date'),
+                  prefixIcon: const Icon(Icons.calendar_today),
+                  hintText: tr('date_hint'),
+                  alignLabelWithHint: true,
+                  onTap: () => _selectDate(context),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return tr(
+                        'date_empty',
+                      );
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: Dimens.large),
+                TextFieldWidget(
+                  textEditingController: _descriptionController,
+                  maxLines: 5,
+                  labelText: tr('description'),
+                  hintText: tr('enter_description_here'),
+                  alignLabelWithHint: true,
+                ),
+                const Expanded(child: SizedBox()),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  child: TextButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate() &&
+                          _selectedDate != null &&
+                          _selectedOption != null) {
+                        final textValue = _amountController.text;
+                        final doubleValue = double.tryParse(textValue);
+
+                        sl<ExpenseBloc>().add(
+                          AddExpenseEvent(
+                            amount: doubleValue!,
+                            category: _selectedOption!.index,
+                            dateTime: _selectedDate!,
+                            description: _descriptionController.text,
+                          ),
+                        );
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(Dimens.medium),
+                      ),
+                    ),
+                    child: Text(
+                      tr('add'),
+                      style: const TextStyle(fontSize: 16.0),
                     ),
                   ),
-                  child: Text(
-                    tr('add'),
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -133,16 +200,16 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
+    _selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
-    if (selectedDate != null) {
+    if (_selectedDate != null) {
       setState(() {
-        _dateController.text = _formatDate(selectedDate);
+        _dateController.text = _formatDate(_selectedDate!);
       });
     }
   }

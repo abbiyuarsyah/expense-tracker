@@ -19,6 +19,8 @@ class ExpenseDatasourceImpl extends ExpenseDatasource {
     final repo = ExpenseDatasourceImpl._(hiveInterface: hiveInterface);
 
     await repo.init();
+    await repo.open();
+
     return repo;
   }
 
@@ -54,5 +56,9 @@ class ExpenseDatasourceImpl extends ExpenseDatasource {
     return values.isEmpty
         ? Future.value([ExpenseModel.empty()])
         : Future.value(values);
+  }
+
+  Future<void> open() async {
+    _box = await _hiveInterface.openBox(ExpenseModel.boxName);
   }
 }

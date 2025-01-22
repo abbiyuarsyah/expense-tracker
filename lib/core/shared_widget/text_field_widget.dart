@@ -38,9 +38,7 @@ class TextFieldWidget extends StatelessWidget {
       keyboardType: textInputType,
       readOnly: readOnly ?? false,
       maxLines: maxLines,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-      ],
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         labelText: labelText,
         prefixText: prefixText,

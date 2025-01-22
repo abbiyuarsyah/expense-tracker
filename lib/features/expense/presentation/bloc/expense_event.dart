@@ -5,13 +5,23 @@ abstract class ExpenseEvent {
 }
 
 class GetExpensesEvent extends ExpenseEvent {
-  const GetExpensesEvent();
+  const GetExpensesEvent({required this.date});
+
+  final DateTime date;
 }
 
 class AddExpenseEvent extends ExpenseEvent {
-  const AddExpenseEvent({required this.expense});
+  const AddExpenseEvent({
+    required this.amount,
+    required this.category,
+    required this.dateTime,
+    required this.description,
+  });
 
-  final ExpenseEntity expense;
+  final double amount;
+  final int category;
+  final DateTime dateTime;
+  final String description;
 }
 
 class DeleteExpenseEvent extends ExpenseEvent {

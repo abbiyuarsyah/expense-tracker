@@ -1,11 +1,14 @@
-import 'package:expense_tracker/core/extensions/number_formatter.dart';
+import 'package:expense_tracker/features/expense/domain/entities/expense_entity.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/dimens.dart';
 import '../../../../core/shared_widget/card_container.dart';
+import 'list_item_expense_widget.dart';
 
 class ListExpenseWidget extends StatelessWidget {
-  const ListExpenseWidget({super.key});
+  const ListExpenseWidget({super.key, required this.expenses});
+
+  final List<ExpenseEntity> expenses;
 
   @override
   Widget build(BuildContext context) {
@@ -34,55 +37,12 @@ class ListExpenseWidget extends StatelessWidget {
           SizedBox(
             height: 400,
             child: ListView.builder(
-              itemCount: 5,
+              itemCount: expenses.length,
               itemBuilder: (context, index) {
-                return _ListItemExpenseWidget();
+                return ListItemExpenseWidget(expense: expenses[index]);
               },
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ListItemExpenseWidget extends StatelessWidget {
-  @override
-  Widget build(Object context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: Dimens.xxLarge),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            child: Icon(
-              Icons.food_bank,
-              size: 40,
-            ),
-          ),
-          const SizedBox(
-            width: Dimens.medium,
-          ),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Food",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text("Eat together with family"),
-              ],
-            ),
-          ),
-          Text(
-            (200).toEuroFormat,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          )
         ],
       ),
     );

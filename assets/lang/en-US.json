@@ -8,5 +8,11 @@
     "enter_amount": "Enter amount",
     "date_hint": "DD/MM/YYYY",
     "add": "Add",
+    "expense": "Expense",
+    "amount_empty": "Amount cannot be empty",
+    "category_empty": "Category cannot be empty",
+    "date_empty": "Date cannot be empty",
+    "add_expense_success": "An expense has beend added",
+    "add_expense_failed": "Failed to add an expense",
     "enter_description_here": "Enter your description here..."
 }
