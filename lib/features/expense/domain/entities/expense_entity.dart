@@ -12,4 +12,14 @@ class ExpenseEntity {
   final int category;
   final DateTime date;
   final String description;
+
+  factory ExpenseEntity.empty() {
+    return ExpenseEntity(
+      id: 0,
+      amount: 0,
+      category: 1,
+      date: DateTime.now(),
+      description: '',
+    );
+  }
 }

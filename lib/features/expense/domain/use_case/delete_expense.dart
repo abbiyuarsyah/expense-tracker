@@ -6,8 +6,8 @@ import '../../data/models/expense_model.dart';
 import '../entities/expense_entity.dart';
 import '../repositories/expense_repository.dart';
 
-class DeletExpense extends UseCase<bool, ExpenseEntity> {
-  DeletExpense({required this.repository});
+class DeleteExpense extends UseCase<bool, ExpenseEntity> {
+  DeleteExpense({required this.repository});
 
   final ExpenseRepository repository;
 

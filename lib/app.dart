@@ -9,8 +9,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'expense',
+      title: tr('expense_tracker'),
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
       locale: context.locale,
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => const ExpenseSummaryPage(),

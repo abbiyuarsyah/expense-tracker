@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/constants/dimens.dart';
-import '../../../../core/shared_widget/card_container.dart';
+import '../../../../core/enums/expense_category_enum.dart';
+import '../../../../core/shared_widget/text_field_widget.dart';
 
 class AddExpensePage extends StatefulWidget {
   const AddExpensePage({super.key});
@@ -12,14 +14,11 @@ class AddExpensePage extends StatefulWidget {
 }
 
 class _AddExpensePageState extends State<AddExpensePage> {
-  final List<String> _options = [
-    'Option 1',
-    'Option 2',
-    'Option 3',
-    'Option 4'
-  ];
-  String? _selectedOption;
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  ExpenseCategoryEnum? _selectedOption;
 
   @override
   Widget build(BuildContext context) {
@@ -30,109 +29,88 @@ class _AddExpensePageState extends State<AddExpensePage> {
           color: Colors.white,
         ),
         backgroundColor: Colors.purple,
-        title: const Text(
-          "Add Expense",
-          style: TextStyle(
+        title: Text(
+          tr('add_expense'),
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: Dimens.xxLarge),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimens.large),
-            child: TextField(
-              // controller: _controller,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-              ],
-              decoration: InputDecoration(
-                labelText: 'Amount in €',
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(Dimens.large).copyWith(
+            bottom: Dimens.xxLarge,
+          ),
+          child: Column(
+            children: [
+              TextFieldWidget(
+                textEditingController: _amountController,
+                textInputType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
+                labelText: tr('amount'),
                 prefixText: '€ ',
-                border: OutlineInputBorder(),
-                hintText: 'Enter amount',
+                hintText: tr('enter_amount'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Name cannot be empty';
+                  }
+                  return null;
+                },
               ),
-              onChanged: (value) {
-                // Optionally handle value change
-                print('Entered amount: $value');
-              },
-            ),
-          ),
-          SizedBox(height: Dimens.large),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimens.large),
-            child: DropdownButtonFormField<String>(
-              value: _selectedOption,
-              decoration: InputDecoration(
-                labelText: 'Select an Option',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.list),
+              const SizedBox(height: Dimens.large),
+              DropdownButtonFormField<ExpenseCategoryEnum>(
+                value: _selectedOption,
+                decoration: InputDecoration(
+                  labelText: tr('select_category'),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.list),
+                ),
+                items: ExpenseCategoryEnum.values.map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category.value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedOption = value;
+                  });
+                },
               ),
-              items: _options.map((option) {
-                return DropdownMenuItem(
-                  value: option,
-                  child: Text(option),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedOption = value;
-                });
-                print('Selected option: $value');
-              },
-            ),
-          ),
-          SizedBox(height: Dimens.large),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimens.large),
-            child: TextFormField(
-              controller: _dateController,
-              readOnly: true,
-              decoration: InputDecoration(
-                labelText: 'Select a Date',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.calendar_today),
-                hintText: 'DD/MM/YYYY',
+              const SizedBox(height: Dimens.large),
+              TextFieldWidget(
+                textEditingController: _dateController,
+                readOnly: true,
+                labelText: tr('select_date'),
+                prefixIcon: const Icon(Icons.calendar_today),
+                hintText: tr('date_hint'),
+                alignLabelWithHint: true,
+                onTap: () => _selectDate(context),
               ),
-              onTap: () => _selectDate(context),
-            ),
-          ),
-          SizedBox(height: Dimens.large),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimens.large),
-            child: TextField(
-              // controller: _descriptionController,
-              maxLines: 5, // Allows multi-line input
-              decoration: InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
-                hintText: 'Enter your description here...',
-                alignLabelWithHint:
-                    true, // Aligns the label for multi-line fields
+              const SizedBox(height: Dimens.large),
+              TextFieldWidget(
+                textEditingController: _descriptionController,
+                maxLines: 5,
+                labelText: tr('description'),
+                hintText: tr('enter_description_here'),
+                alignLabelWithHint: true,
               ),
-              onChanged: (value) {
-                print('Description: $value');
-              },
-            ),
-          ),
-          const Expanded(child: SizedBox()),
-          CardContainer(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: Dimens.xxLarge),
-              child: SizedBox(
+              const Expanded(child: SizedBox()),
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 40,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddExpensePage()),
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      print('Form is valid');
+                    }
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.purple,
@@ -142,14 +120,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     ),
                   ),
                   child: Text(
-                    'Add Expense',
+                    tr('add'),
                     style: const TextStyle(fontSize: 16.0),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

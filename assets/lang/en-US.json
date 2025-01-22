@@ -1,0 +1,12 @@
+{
+    "expense_tracker": "Expense Tracker",
+    "add_expense": "Add Expense",
+    "description": "Description",
+    "select_date": "Select a Date",
+    "select_category": "Select a Category",
+    "amount": "Amount",
+    "enter_amount": "Enter amount",
+    "date_hint": "DD/MM/YYYY",
+    "add": "Add",
+    "enter_description_here": "Enter your description here..."
+}
