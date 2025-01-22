@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/extensions/number_formatter.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/dimens.dart';
@@ -14,25 +15,26 @@ class SummaryWidget extends StatelessWidget {
       isBottomRounded: true,
       shadow: [
         BoxShadow(
-          color: Colors.grey.withOpacity(0.1), // Shadow color
-          spreadRadius: 2, // Spread radius
-          blurRadius: 5, // Blur radius
-          offset: const Offset(0, 4), // Shadow position (x, y)
+          color: Colors.grey.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: const Offset(0, 4),
         ),
       ],
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Spent this week",
             style: TextStyle(
               fontSize: 16,
             ),
           ),
           Text(
-            "20.000,56",
-            style: TextStyle(
+            (200.5).toEuroFormat,
+            style: const TextStyle(
               fontSize: 38,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

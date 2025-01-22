@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/extensions/number_formatter.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/dimens.dart';
@@ -31,7 +32,7 @@ class ListExpenseWidget extends StatelessWidget {
             height: Dimens.medium,
           ),
           SizedBox(
-            height: 280,
+            height: 400,
             child: ListView.builder(
               itemCount: 5,
               itemBuilder: (context, index) {
@@ -48,16 +49,21 @@ class ListExpenseWidget extends StatelessWidget {
 class _ListItemExpenseWidget extends StatelessWidget {
   @override
   Widget build(Object context) {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: Dimens.large),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Dimens.xxLarge),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.food_bank),
-          SizedBox(
+          const SizedBox(
+            child: Icon(
+              Icons.food_bank,
+              size: 40,
+            ),
+          ),
+          const SizedBox(
             width: Dimens.medium,
           ),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,8 +78,8 @@ class _ListItemExpenseWidget extends StatelessWidget {
             ),
           ),
           Text(
-            "200",
-            style: TextStyle(
+            (200).toEuroFormat,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           )
