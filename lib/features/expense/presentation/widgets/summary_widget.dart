@@ -105,6 +105,8 @@ class SummaryWidget extends StatelessWidget {
                   ),
                 ],
               );
+            } else if (state.weeklyExpenseStatus == StateStatus.failed) {
+              return const SizedBox();
             }
 
             return const SizedBox();

@@ -29,6 +29,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
             weeklyExpensesByCategory: const {},
             totalExpenseInAWeek: 0,
             highestSpentCategory: -1,
+            errorMessage: '',
           ),
         ) {
     on<GetExpensesEvent>(_onGetExpensesEvent);
@@ -64,7 +65,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
     final result = await getExpenses(date);
     result.fold((l) {
-      emit(state.copyWith(getExpensesStatus: StateStatus.failed));
+      emit(state.copyWith(
+        getExpensesStatus: StateStatus.failed,
+        errorMessage: l.message,
+      ));
     }, (r) {
       emit(state.copyWith(getExpensesStatus: StateStatus.loaded, expenses: r));
     });

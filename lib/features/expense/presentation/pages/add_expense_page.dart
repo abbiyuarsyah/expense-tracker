@@ -78,6 +78,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             child: Column(
               children: [
                 TextFieldWidget(
+                  key: const Key('amount_field'),
                   textEditingController: _amountController,
                   textInputType: const TextInputType.numberWithOptions(
                     decimal: true,
@@ -97,6 +98,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 ),
                 const SizedBox(height: Dimens.large),
                 DropdownButtonFormField<ExpenseCategoryEnum>(
+                  key: const Key('category_dropdown'),
                   value: _selectedOption,
                   decoration: InputDecoration(
                     labelText: tr('select_category'),
@@ -127,6 +129,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 ),
                 const SizedBox(height: Dimens.large),
                 TextFieldWidget(
+                  key: const Key('date_field'),
                   textEditingController: _dateController,
                   readOnly: true,
                   labelText: tr('select_date'),
@@ -145,6 +148,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 ),
                 const SizedBox(height: Dimens.large),
                 TextFieldWidget(
+                  key: const Key('description_field'),
                   textEditingController: _descriptionController,
                   maxLines: 5,
                   labelText: tr('description'),
@@ -156,6 +160,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   width: MediaQuery.of(context).size.width,
                   height: 40,
                   child: TextButton(
+                    key: const Key('submit_button'),
                     onPressed: () {
                       if (_formKey.currentState!.validate() &&
                           _selectedDate != null &&

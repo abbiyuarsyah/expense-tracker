@@ -7,6 +7,7 @@ import '../../../../core/constants/dimens.dart';
 import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/shared_widget/app_bar_widget.dart';
+import '../../../../core/shared_widget/error_screen_widget.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
@@ -117,6 +118,16 @@ class ExpenseSummaryPage extends StatelessWidget {
                   ),
                 ],
               ),
+            );
+          } else if (state.getExpensesStatus == StateStatus.failed) {
+            return ErrorScreenWidget(
+              message: state.errorMessage,
+              onPressed: () {
+                sl<ExpenseBloc>().add(const GetExpensesEvent(
+                  selectDate: SelectDateEnum.currentDate,
+                ));
+                sl<ExpenseBloc>().add(const GetWeeklyExpenseEvet());
+              },
             );
           }
 
