@@ -23,8 +23,6 @@ enum ExpenseCategoryEnum {
         return Icons.music_note_outlined;
       case transportation:
         return Icons.emoji_transportation_outlined;
-      default:
-        return Icons.error;
     }
   }
 }
