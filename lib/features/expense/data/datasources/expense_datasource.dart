@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 abstract class ExpenseDatasource {
-  Future<List<ExpenseModel>> get(DateTime date);
+  Future<List<ExpenseModel>> get(DateTime? date);
   Future<ExpenseModel> add(ExpenseModel model);
   Future<bool> deleteEntity(ExpenseModel model);
 }
@@ -52,7 +52,11 @@ class ExpenseDatasourceImpl extends ExpenseDatasource {
   }
 
   @override
-  Future<List<ExpenseModel>> get(DateTime date) async {
+  Future<List<ExpenseModel>> get(DateTime? date) async {
+    if (date == null) {
+      return _box.values.toList().cast<ExpenseModel>();
+    }
+
     final values = _box.values.toList().cast<ExpenseModel>();
     final result =
         values.where((e) => DateUtils.isSameDay(e.date, date)).toList();

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/dimens.dart';
 import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
-import '../../../../core/shared_widget/card_container.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
@@ -28,6 +27,9 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
     sl<ExpenseBloc>().add(
       const GetExpensesEvent(selectDate: SelectDateEnum.today),
     );
+    sl<ExpenseBloc>().add(
+      const GetWeeklyExpenseEvet(selectDate: SelectDateEnum.withoutDate),
+    );
   }
 
   @override
@@ -44,7 +46,7 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
           ),
         ),
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white,
       body: BlocConsumer<ExpenseBloc, ExpenseState>(
         listenWhen: (previous, current) =>
             previous.deleteExpenseStatus != current.deleteExpenseStatus,
@@ -88,48 +90,48 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
               width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: Dimens.extraLarge),
-                      SummaryWidget(),
-                      SizedBox(height: Dimens.extraLarge),
-                      ListExpenseWidget(),
-                    ],
+                  const SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: Dimens.medium),
+                        SummaryWidget(),
+                        SizedBox(height: Dimens.medium),
+                        ListExpenseWidget(),
+                      ],
+                    ),
                   ),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: CardContainer(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: Dimens.xxLarge),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 40,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AddExpensePage()),
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(Dimens.medium),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimens.large),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 40,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AddExpensePage(),
                                 ),
+                              );
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(Dimens.medium),
                               ),
-                              child: Text(
-                                tr('add_expense'),
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            ),
+                            child: Text(
+                              tr('add_expense'),
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),

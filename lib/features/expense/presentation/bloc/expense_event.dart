@@ -31,3 +31,9 @@ class DeleteExpenseEvent extends ExpenseEvent {
 
   final ExpenseEntity expense;
 }
+
+class GetWeeklyExpenseEvet extends ExpenseEvent {
+  const GetWeeklyExpenseEvet({required this.selectDate});
+
+  final SelectDateEnum selectDate;
+}

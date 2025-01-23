@@ -3,4 +3,5 @@ enum SelectDateEnum {
   today,
   tomorrow,
   currentDate,
+  withoutDate,
 }

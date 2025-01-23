@@ -83,8 +83,10 @@ class ListExpenseWidget extends StatelessWidget {
                   SizedBox(
                     height: 400,
                     child: ListView.separated(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: Dimens.medium),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Dimens.medium,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: state.expenses.length,
                       itemBuilder: (context, index) {
                         return ListItemExpenseWidget(
@@ -99,7 +101,7 @@ class ListExpenseWidget extends StatelessWidget {
                 else
                   const SizedBox(
                     height: 400,
-                    child: Center(child: Text("You don't have expenses yet")),
+                    child: Text("You don't have expenses yet"),
                   )
               ],
             ),
