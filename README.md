@@ -1,6 +1,6 @@
 # Expense Tracker
 
-The Personal Expense Tracker App is designed to help users effectively track their expenses. It allows users to keep track of their spending, categorize expenses, and view them in an organized manner. The app includes the following core features:
+The Personal Expense Tracker App is designed to help users effectively track their expenses. It allows users to keep track of their spending, categorize expenses, and view them in an organized manner.
 
 https://github.com/user-attachments/assets/50d26908-5c9e-482e-81b0-32ac61e2d7f3
 
