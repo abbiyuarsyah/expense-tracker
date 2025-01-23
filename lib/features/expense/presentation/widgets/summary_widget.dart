@@ -56,41 +56,53 @@ class SummaryWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: Dimens.medium),
-                  ...state.weeklyExpensesByCategory.entries.map((category) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: Dimens.small),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                category.key.getCategoryIcon,
-                                color: Colors.white,
-                                size: 12,
-                              ),
-                              const SizedBox(width: Dimens.small),
-                              Text(
-                                category.key.value,
-                                style: const TextStyle(
+                  ...state.weeklyExpensesByCategory.entries.map(
+                    (category) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: Dimens.small),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  category.key.getCategoryIcon,
                                   color: Colors.white,
-                                  fontSize: 12,
+                                  size: 12,
                                 ),
-                              ),
-                            ],
-                          ),
-                          // Category value
-                          Text(
-                            category.value.toEuroFormat,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                                const SizedBox(width: Dimens.small),
+                                Text(
+                                  "${category.key.value} -",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(width: Dimens.small),
+                                (state.highestSpentCategory ==
+                                        category.key.index)
+                                    ? Text(
+                                        tr('highest_spending'),
+                                        style: const TextStyle(
+                                          color: Colors.yellow,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    : const SizedBox()
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                            Text(
+                              category.value.toEuroFormat,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ],
               );
             }

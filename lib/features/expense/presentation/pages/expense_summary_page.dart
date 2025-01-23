@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/dimens.dart';
 import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
+import '../../../../core/shared_widget/app_bar_widget.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
@@ -27,25 +28,13 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
     sl<ExpenseBloc>().add(
       const GetExpensesEvent(selectDate: SelectDateEnum.today),
     );
-    sl<ExpenseBloc>().add(
-      const GetWeeklyExpenseEvet(selectDate: SelectDateEnum.withoutDate),
-    );
+    sl<ExpenseBloc>().add(const GetWeeklyExpenseEvet());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          tr('expense'),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      appBar: AppBarWidget(title: tr('expense')),
       backgroundColor: Colors.white,
       body: BlocConsumer<ExpenseBloc, ExpenseState>(
         listenWhen: (previous, current) =>
@@ -66,6 +55,7 @@ class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
             sl<ExpenseBloc>().add(const GetExpensesEvent(
               selectDate: SelectDateEnum.currentDate,
             ));
+            sl<ExpenseBloc>().add(const GetWeeklyExpenseEvet());
           } else if (state.deleteExpenseStatus == StateStatus.failed) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

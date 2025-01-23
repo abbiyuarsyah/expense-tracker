@@ -19,5 +19,6 @@
     "add_expense_failed": "Unable to add expense",
     "delete_expense_failed": "Unable to delete expense",
     "not_having_expenses": "No expenses recorded yet",
+    "highest_spending": "highest spending",
     "enter_description_here": "Add your description here..."
 }

@@ -28,6 +28,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
             selectedDate: DateTime.now(),
             weeklyExpensesByCategory: const {},
             totalExpenseInAWeek: 0,
+            highestSpentCategory: -1,
           ),
         ) {
     on<GetExpensesEvent>(_onGetExpensesEvent);
@@ -79,9 +80,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     result.fold((l) {
       emit(state.copyWith(weeklyExpenseStatus: StateStatus.failed));
     }, (r) {
-      // final today = DateTime.now();
-      // final oneWeekAgo = today.subtract(const Duration(days: 7));
-
       final today = DateTime.now();
       final oneWeekAgo = today.subtract(const Duration(days: 7));
       final filteredExpenses = r
@@ -107,11 +105,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         }
       });
 
-      if (highestSpendingCategory != null) {
-        print(
-            '\nCategory with the highest spending: ${highestSpendingCategory!.value} (\$${highestSpendingAmount.toStringAsFixed(2)})');
-      }
-
       final totalExpenseInAWeek = r
           .where((expense) =>
               expense.date
@@ -123,6 +116,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         weeklyExpenseStatus: StateStatus.loaded,
         weeklyExpensesByCategory: categoryTotals,
         totalExpenseInAWeek: totalExpenseInAWeek,
+        highestSpentCategory: highestSpendingCategory?.index,
       ));
     });
   }

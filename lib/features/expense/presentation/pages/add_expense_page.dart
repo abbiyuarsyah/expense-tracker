@@ -10,6 +10,7 @@ import '../../../../core/constants/dimens.dart';
 import '../../../../core/enums/expense_category_enum.dart';
 import '../../../../core/enums/select_date_enum.dart';
 import '../../../../core/service_locator/service_locator.dart';
+import '../../../../core/shared_widget/app_bar_widget.dart';
 import '../../../../core/shared_widget/text_field_widget.dart';
 import '../../../../core/utils/currecncy_input_formatter.dart';
 
@@ -32,20 +33,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          tr('add_expense'),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      appBar: AppBarWidget(title: tr('add_expense')),
       body: BlocListener<ExpenseBloc, ExpenseState>(
         listenWhen: (previous, current) =>
             previous.addExpenseFlag != current.addExpenseFlag,
@@ -62,9 +50,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 backgroundColor: Colors.green,
               ),
             );
-            sl<ExpenseBloc>().add(
-              const GetExpensesEvent(selectDate: SelectDateEnum.today),
-            );
+            sl<ExpenseBloc>().add(const GetExpensesEvent(
+              selectDate: SelectDateEnum.today,
+            ));
+            sl<ExpenseBloc>().add(const GetWeeklyExpenseEvet());
             Navigator.pop(context);
           } else if (state.addExpenseStatus == StateStatus.failed) {
             ScaffoldMessenger.of(context).showSnackBar(

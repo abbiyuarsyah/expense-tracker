@@ -15,6 +15,7 @@ class ExpenseState extends Equatable {
     required this.selectedDate,
     required this.weeklyExpensesByCategory,
     required this.totalExpenseInAWeek,
+    required this.highestSpentCategory,
   });
 
   final List<ExpenseEntity> expenses;
@@ -26,6 +27,7 @@ class ExpenseState extends Equatable {
   final DateTime selectedDate;
   final Map<ExpenseCategoryEnum, double> weeklyExpensesByCategory;
   final double totalExpenseInAWeek;
+  final int highestSpentCategory;
 
   ExpenseState copyWith({
     List<ExpenseEntity>? expenses,
@@ -37,6 +39,7 @@ class ExpenseState extends Equatable {
     DateTime? selectedDate,
     Map<ExpenseCategoryEnum, double>? weeklyExpensesByCategory,
     double? totalExpenseInAWeek,
+    int? highestSpentCategory,
   }) {
     return ExpenseState(
       expenses: expenses ?? this.expenses,
@@ -49,6 +52,7 @@ class ExpenseState extends Equatable {
       weeklyExpensesByCategory:
           weeklyExpensesByCategory ?? this.weeklyExpensesByCategory,
       totalExpenseInAWeek: totalExpenseInAWeek ?? this.totalExpenseInAWeek,
+      highestSpentCategory: highestSpentCategory ?? this.highestSpentCategory,
     );
   }
 
@@ -63,5 +67,6 @@ class ExpenseState extends Equatable {
         selectedDate,
         weeklyExpensesByCategory,
         totalExpenseInAWeek,
+        highestSpentCategory,
       ];
 }
