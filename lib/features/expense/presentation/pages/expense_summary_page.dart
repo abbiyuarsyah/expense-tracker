@@ -14,22 +14,8 @@ import '../widgets/list_expense_widget.dart';
 import '../widgets/summary_widget.dart';
 import 'add_expense_page.dart';
 
-class ExpenseSummaryPage extends StatefulWidget {
+class ExpenseSummaryPage extends StatelessWidget {
   const ExpenseSummaryPage({super.key});
-
-  @override
-  State<ExpenseSummaryPage> createState() => _ExpenseSummaryPageState();
-}
-
-class _ExpenseSummaryPageState extends State<ExpenseSummaryPage> {
-  @override
-  void initState() {
-    super.initState();
-    sl<ExpenseBloc>().add(
-      const GetExpensesEvent(selectDate: SelectDateEnum.today),
-    );
-    sl<ExpenseBloc>().add(const GetWeeklyExpenseEvet());
-  }
 
   @override
   Widget build(BuildContext context) {
